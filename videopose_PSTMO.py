@@ -149,7 +149,7 @@ def main(args):
 
     anim_output = {'Ours': prediction}
     input_keypoints = image_coordinates(input_keypoints[..., :2], w=1000, h=1002)
-    pdb.set_trace()
+    # pdb.set_trace()
     ckpt, time3 = ckpt_time(time2)
     print('-------------- generate reconstruction 3D data spends {:.2f} seconds'.format(ckpt))
 
@@ -182,7 +182,7 @@ def inference_video(video_path, detector_2d):
     args.video_name = basename[:basename.rfind('.')]
     args.viz_video = video_path
     # args.viz_export = f'{dir_name}/{args.detector_2d}_{video_name}_data.npy'
-    args.viz_output = f'{dir_name}/{args.detector_2d}_{args.video_name}.mp4'
+    args.viz_output = f'./outputs/{args.detector_2d}_{args.video_name}.mp4'
     # args.viz_limit = 20
     #args.input_npz = 'outputs/alpha_pose_test/test.npz'
 
@@ -193,4 +193,4 @@ def inference_video(video_path, detector_2d):
 
 
 if __name__ == '__main__':
-    inference_video('./outputs/H017_GF_01_20210922_151118.mp4', 'alpha_pose')
+    inference_video('./input/H017_GF_01_20210922_151118.mp4', 'alpha_pose')
