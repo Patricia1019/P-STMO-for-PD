@@ -2,7 +2,7 @@
 
 > pose estimation for PD
 
-<p align="center"><img src="asset/kunkun_alphapose.gif" width="100%" alt="" /></p>
+<p align="center"><img src="asset/H013_G3_02.gif" width="100%" alt="" /></p>
 
 ## Prerequisite
 
