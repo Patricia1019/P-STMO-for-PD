@@ -69,7 +69,7 @@ class Skeleton:
 
 
 def main(args):
-    pdb.set_trace()
+    
     detector_2d = get_detector_2d(args.detector_2d)
 
     assert detector_2d, 'detector_2d should be in ({alpha, hr, open}_pose)'
@@ -78,7 +78,7 @@ def main(args):
     #args.input_npz = './outputs/alpha_pose_skiing_cut/skiing_cut.npz'
     if not args.input_npz:
         video_name = args.viz_video
-        keypoints = detector_2d(video_name)
+        keypoints = detector_2d(video_name)  ### detect 2d keypoints, around 40it/s
     else:
         npz = np.load(args.input_npz)
         keypoints = npz['kpts']  # (N, 17, 2)
@@ -92,7 +92,6 @@ def main(args):
 
     # model_pos = TemporalModel(17, 2, 17, filter_widths=[3, 3, 3, 3, 3], causal=args.causal, dropout=args.dropout, channels=args.channels,
     #                           dense=args.dense)
-    pdb.set_trace()
     model = {}
     # model['trans'] = Model(args).cuda()
     model['trans'] = Model(args)
