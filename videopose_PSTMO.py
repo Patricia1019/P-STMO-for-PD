@@ -78,7 +78,7 @@ def main(args):
     #args.input_npz = './outputs/alpha_pose_skiing_cut/skiing_cut.npz'
     if not args.input_npz:
         video_name = args.viz_video
-        keypoints = detector_2d(video_name)  ### detect 2d keypoints, around 40it/s
+        keypoints = detector_2d(video_name)  ### detect 2d keypoints, around 40it/s, [frame,17,2]
     else:
         npz = np.load(args.input_npz)
         keypoints = npz['kpts']  # (N, 17, 2)
@@ -117,7 +117,6 @@ def main(args):
     model['trans'].load_state_dict(model_dict)
     ckpt, time2 = ckpt_time(time1)
     print('-------------- load 3D model spends {:.2f} seconds'.format(ckpt))
-
     #  Receptive field: 243 frames for args.arc [3, 3, 3, 3, 3]
     receptive_field = args.frames
     pad = (receptive_field - 1) // 2  # Padding on each side
@@ -138,7 +137,7 @@ def main(args):
                              pad=pad, causal_shift=causal_shift, augment=args.test_time_augmentation, shuffle=False,
                              kps_left=kps_left, kps_right=kps_right, joints_left=joints_left, joints_right=joints_right)
 
-    prediction = val(args, gen, model)
+    prediction = val(args, gen, model) # [frame,17,3]
 
     # save 3D joint points
     np.save(f'outputs/test_3d_{args.video_name}_output.npy', prediction, allow_pickle=True)
@@ -186,7 +185,7 @@ def inference_video(video_path, detector_2d):
     args.video_name = basename[:basename.rfind('.')]
     args.viz_video = video_path
     # args.viz_export = f'{dir_name}/{args.detector_2d}_{video_name}_data.npy'
-    args.viz_output = f'./outputs/{args.detector_2d}_{args.video_name}.mp4'
+    args.viz_output = f'./outputs/{args.detector_2d}_{args.video_name}_video.mp4'
     # args.viz_limit = 20
     #args.input_npz = 'outputs/alpha_pose_test/test.npz'
 
