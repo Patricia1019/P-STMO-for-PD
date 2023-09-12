@@ -44,10 +44,15 @@ def get_detector_2d(detector_name):
         from joints_detectors.hrnet.pose_estimation.video import generate_kpts as hr_pose
         return hr_pose
 
+    def get_mediapipe_pose():
+        from joints_detectors.mediapipe.pose import generate_kpts as mediapipe_pose
+        return mediapipe_pose
+
     detector_map = {
         'alpha_pose': get_alpha_pose,
         'hr_pose': get_hr_pose,
         # 'open_pose': open_pose
+        'mediapipe_pose': get_mediapipe_pose,
     }
 
     assert detector_name in detector_map, f'2D detector: {detector_name} not implemented yet!'
@@ -64,6 +69,7 @@ class Skeleton:
 
 
 def main(args):
+    pdb.set_trace()
     detector_2d = get_detector_2d(args.detector_2d)
 
     assert detector_2d, 'detector_2d should be in ({alpha, hr, open}_pose)'
@@ -86,10 +92,10 @@ def main(args):
 
     # model_pos = TemporalModel(17, 2, 17, filter_widths=[3, 3, 3, 3, 3], causal=args.causal, dropout=args.dropout, channels=args.channels,
     #                           dense=args.dense)
-
+    pdb.set_trace()
     model = {}
-    model['trans'] = Model(args).cuda()
-
+    # model['trans'] = Model(args).cuda()
+    model['trans'] = Model(args)
     # if torch.cuda.is_available():
     #     model_pos = model_pos.cuda()
 
@@ -105,12 +111,11 @@ def main(args):
     model_dict = model['trans'].state_dict()
 
     no_refine_path = "checkpoint/PSTMOS_no_refine_48_5137_in_the_wild.pth"
-    pre_dict = torch.load(no_refine_path)
+    pre_dict = torch.load(no_refine_path,map_location=torch.device('cpu'))
     for key, value in pre_dict.items():
         name = key[7:]
         model_dict[name] = pre_dict[key]
     model['trans'].load_state_dict(model_dict)
-
     ckpt, time2 = ckpt_time(time1)
     print('-------------- load 3D model spends {:.2f} seconds'.format(ckpt))
 
@@ -193,4 +198,4 @@ def inference_video(video_path, detector_2d):
 
 
 if __name__ == '__main__':
-    inference_video('./input/H017_GF_01_20210922_151118.mp4', 'alpha_pose')
+    inference_video('./input/H017_GF_01_20210922_151118.mp4', 'mediapipe_pose')
