@@ -93,8 +93,8 @@ def main(args):
     # model_pos = TemporalModel(17, 2, 17, filter_widths=[3, 3, 3, 3, 3], causal=args.causal, dropout=args.dropout, channels=args.channels,
     #                           dense=args.dense)
     model = {}
-    # model['trans'] = Model(args).cuda()
-    model['trans'] = Model(args)
+    model['trans'] = Model(args).cuda()
+    # model['trans'] = Model(args)
     # if torch.cuda.is_available():
     #     model_pos = model_pos.cuda()
 
